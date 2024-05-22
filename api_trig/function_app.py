@@ -13,7 +13,7 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
         return func.HttpResponse("Missing CosmosDB connection string", status_code=400)
 
     table_service = TableServiceClient.from_connection_string(conn_str=connection_string)
-    table_client = table_service.get_table_client(table_name="YourTableName")
+    table_client = table_service.get_table_client(table_name="VisitorCounts")
 
     try:
         entity = table_client.get_entity(partition_key="partitionKey", row_key="visitorCount")
