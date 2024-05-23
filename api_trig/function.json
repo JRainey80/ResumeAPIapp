@@ -12,5 +12,6 @@
       "direction": "out",
       "name": "$return"
     }
-  ]
+  ],
+  "scriptFile": "function_app.py"
 }
