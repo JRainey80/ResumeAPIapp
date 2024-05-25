@@ -18,7 +18,10 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
         table_client = table_service.get_table_client(table_name="VisitorCounts")
 
         try:
-            entity = table_client.get_entity(partition_key="partitionKey", row_key="visitorCount")
+            entity = table_client.get_entity(partition_key="Counter", row_key="SingleRow")
+            # Ensure the entity has the 'count' attribute
+            if 'count' not in entity:
+                entity['count'] = 0
             entity["count"] += 1
             table_client.update_entity(entity=entity, mode=UpdateMode.REPLACE)
         except ResourceNotFoundError:
@@ -42,5 +45,3 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
     except Exception as e:
         logging.error(f"Unexpected error: {e}")
         return func.HttpResponse("Internal server error", status_code=500)
-
-    
