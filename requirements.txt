@@ -3,7 +3,6 @@
 # Manually managing azure-functions-worker may cause unexpected issues
 
 azure-functions
-azure-cosmos
 azure-data-tables
 azure-identity
 azure-key-vault-secrets
