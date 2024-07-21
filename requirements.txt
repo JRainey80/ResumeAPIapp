@@ -4,6 +4,5 @@
 
 azure-functions
 azure-data-tables
-azure-keyvault-secrets
-azure-identity
+
 
