@@ -10,7 +10,7 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
 
        
     origin = req.headers.get("Origin")
-    allowed_origins = ["https://cdn-raineycloud.azureedge.net", "https://portal.azure.com", "https://raineyresume.z13.web.core.windows.net", "https://resumeapiapp.azurewebsites.net/api/api_trig"]  
+    allowed_origins = ["https://cdn-raineycloud.azureedge.net", "https://portal.azure.com", "https://raineyresume.z13.web.core.windows.net", "https://resumeapiapp.azurewebsites.net/api/api_trig", "https://resume.rainey-cloud.com"]  
 
     if origin not in allowed_origins:
         logging.warning(f"Unauthorized origin: {origin}")
