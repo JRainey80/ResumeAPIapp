@@ -71,6 +71,8 @@ jobs:
           client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_31998CFDDA4D47E8B5480FF1F906304A }}
           tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_0D567D23AFD8462799D0F500FA9A3DAF }}
           subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_6B2A3EB8E85F48FA8159F76A8E24C894 }}
+          auth-type: federated
+          enable-AzPSSession: false
 
       - name: 'Deploy to Azure Functions'
         uses: Azure/functions-action@v1
