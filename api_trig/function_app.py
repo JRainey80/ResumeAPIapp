@@ -1,9 +1,9 @@
-import logging
 import azure.functions as func
 from azure.data.tables import TableServiceClient, UpdateMode
 from azure.core.exceptions import ResourceNotFoundError, HttpResponseError
 import os
 import json
+import logging
 
 def main(req: func.HttpRequest) -> func.HttpResponse:
     logging.info('Python HTTP trigger function processed a request.')
