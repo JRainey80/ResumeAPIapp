@@ -52,8 +52,8 @@ jobs:
     needs: build
     environment:
       name: 'Production'
-      url: ${{ steps.deploy-to-function.outputs.webapp-url }}
-    permissions:
+      url: 
+    permissions:${{ steps.deploy-to-function.outputs.webapp-url }}
       id-token: write #This is required for requesting the JWT
 
     steps:
