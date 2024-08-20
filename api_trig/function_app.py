@@ -1,5 +1,6 @@
 import azure.functions as func
-from azure.data.tables import TableServiceClient, UpdateMode
+from azure.data.tables import TableServiceClient
+from azure.data.tables import UpdateMode
 from azure.core.exceptions import ResourceNotFoundError, HttpResponseError
 import os
 import json
