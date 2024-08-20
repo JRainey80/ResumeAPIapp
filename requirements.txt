@@ -4,8 +4,7 @@
 azure-data-tables
 azure-core
 azure-functions
-azure.data.tables 
-'azure-data-tables'
+azure.data.tables
 
 
 
