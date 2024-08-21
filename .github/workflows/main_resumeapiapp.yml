@@ -52,7 +52,7 @@ jobs:
     needs: build
     environment:
       name: 'Production'
-      url: ${{ steps.deploy-to-function.outputs.webapp-url }}
+      url: 'https://api.rainey-cloud.com'
     permissions:
       id-token: write #This is required for requesting the JWT
 
