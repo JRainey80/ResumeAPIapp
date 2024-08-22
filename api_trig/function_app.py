@@ -1,5 +1,6 @@
 import azure.functions as func
 import sys
+print(sys.path)
 from azure.data.tables import TableServiceClient, UpdateMode
 from azure.core.exceptions import ResourceNotFoundError, HttpResponseError
 import os
@@ -33,6 +34,7 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
             "Access-Control-Max-Age": "3600",
         }
         return func.HttpResponse(status_code=204, headers=headers)
+        
         
     connection_string = os.getenv('DB_Table_Connection_String')
     if not connection_string:
