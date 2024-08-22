@@ -32,7 +32,12 @@ jobs:
           source venv/bin/activate
 
       - name: Install dependencies
-        run: pip install -r requirements.txt
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+      
+      - name: Clean up previous build artifacts (if any)
+        run: rm -f release.zip
 
       # Optional: Add step to run tests here
 
@@ -81,4 +86,10 @@ jobs:
           package: ${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}
           scm-do-build-during-deployment: true
           enable-oryx-build: true
+
+
+
+
+
+  
           
