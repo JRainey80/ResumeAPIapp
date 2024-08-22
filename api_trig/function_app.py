@@ -1,4 +1,5 @@
 import azure.functions as func
+import sys
 from azure.data.tables import TableServiceClient, UpdateMode
 from azure.core.exceptions import ResourceNotFoundError, HttpResponseError
 import os
