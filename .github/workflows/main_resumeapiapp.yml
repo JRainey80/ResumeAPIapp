@@ -28,7 +28,10 @@ jobs:
       - name: Install Azure Functions Core Tools
         run: |
           npm install -g azure-functions-core-tools@4 --unsafe-perm true
-
+      
+      - name: Install azure-data-tables package
+        run: pip install azure-data-tables -t .
+        
       - name: Azure Login with Service Principal
         uses: azure/login@v2
         with:
