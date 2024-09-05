@@ -39,6 +39,16 @@ resource "azurerm_key_vault" "Key-Vault" {
   }
 }
 
+data "azurerm_key_vault_secret" "SA-ResumeAPI-AK" {
+  name         = "SA-ResumeAPI-AK"
+  key_vault_id = data.azurerm_key_vault.Key-Vault.id
+}
+
+output "secret_value" {
+  value     = data.azurerm_key_vault_secret.example.value
+  sensitive = true
+}
+
 #Function App API
 
 resource "azurerm_storage_account" "SA-ResumeAPI" {
@@ -57,29 +67,26 @@ resource "azurerm_service_plan" "App-Service-Plan" {
   sku_name            = "S1"
 }
 
-resource "azurerm_linux_function_app" "example" {
-  name                = "example-function-app"
+resource "azurerm_linux_function_app" "Function-App" {
+  name                = "ResumeAPIapp"
   location            = azurerm_resource_group.RG-ResumeAPI.location
   resource_group_name = azurerm_resource_group.RG-ResumeAPI.name
   service_plan_id     = azurerm_service_plan.App-Service-Plan.id
 
   storage_account_name       = azurerm_storage_account.SA-ResumeAPI.name
-  storage_account_access_key = azurerm_storage_account.example.primary_access_key
+  storage_account_access_key = data.azurerm_key_vault_secret.SA-ResumeAPI-AK.value
 
   site_config {
     application_stack {
-      python_version = "3.9"
+      python_version = "3.10"
     }
   }
 }
 
-resource "azurerm_function_app_function" "example" {
-  name            = "example-function-app-function"
-  function_app_id = azurerm_linux_function_app.example.id
+resource "azurerm_function_app_function" "Function" {
+  name            = "api_trig"
+  function_app_id = azurerm_linux_function_app.Function-App.id
   language        = "Python"
-  test_data = jsonencode({
-    "name" = "Azure"
-  })
   config_json = jsonencode({
     "bindings" = [
       {
