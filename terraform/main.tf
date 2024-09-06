@@ -90,7 +90,7 @@ resource "azurerm_function_app_function" "Function" {
   config_json = jsonencode({
     "bindings": [
     {
-      "authLevel": "function",
+      "authLevel": "anonymous",
       "type": "httpTrigger",
       "direction": "in",
       "name": "req",
