@@ -123,16 +123,26 @@ resource "azurerm_linux_function_app" "Function-App" {
       allowed_origins = [
         "https://APIendpoint.azureedge.net",
         "https://raineyresume.z13.web.core.windows.net",
-        "https://resume.rainey-cloud.com"
+        "https://resume.rainey-cloud.com",
+        "https://CDN-RaineyCloud.azureedge.net",
+        "https://APIendpoint.azureedge.net"
       ]
       support_credentials = true
     }
   }
 
   app_settings = {
-    "WEBSITE_RUN_FROM_PACKAGE" = "https://github.com/JRainey80/ResumeAPIapp/actions/runs/10740562515/artifacts/1901673852"
+    "WEBSITE_RUN_FROM_PACKAGE" = "https://github.com/JRainey80/ResumeAPIapp/actions/runs/10973026437/artifacts/1961667653"
     "FUNCTIONS_WORKER_RUNTIME" = "python"
     "FUNCTIONS_EXTENSION_VERSION" = "~4"
+    "COSMOS_DB_TABLE" = var.db_table
+    "DB_Table_Connection_String" = var.db_connection_string
+    "SCM_DO_BUILD_DURING_DEPLOYMENT"  = "1"
+    "WEBSITE_ENABLE_SYNC_UPDATE_SITE" = "true"
+    "ENABLE_ORYX_BUILD"               = "1"
+    "PYTHON_VERSION" = "3.10"
+
+
   }
 }
 
