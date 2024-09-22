@@ -93,12 +93,13 @@ resource "azurerm_storage_account" "SA-ResumeAPI" {
 }
 
 resource "azurerm_service_plan" "Service-Plan" {
-  name                = "ASP-ResumeAPIapp-3fff"
+  name                = "ASP-resumeapi-af45"
   location            = azurerm_resource_group.RG-ResumeAPI.location
   resource_group_name = azurerm_resource_group.RG-ResumeAPI.name
-  os_type             = "Linux"
-  sku_name            = "S1"
+  os_type             = "Linux" 
+  sku_name            = "Y1"    
 }
+
 
 # Function App API
 
@@ -132,7 +133,7 @@ resource "azurerm_linux_function_app" "Function-App" {
   }
 
   app_settings = {
-    "WEBSITE_RUN_FROM_PACKAGE" = "https://github.com/JRainey80/ResumeAPIapp/actions/runs/10973026437/artifacts/1961667653"
+    "WEBSITE_RUN_FROM_PACKAGE" = "https://github.com/JRainey80/ResumeAPIapp/actions/runs/10973807171/artifacts/1961815996"
     "FUNCTIONS_WORKER_RUNTIME" = "python"
     "FUNCTIONS_EXTENSION_VERSION" = "~4"
     "COSMOS_DB_TABLE" = var.db_table
@@ -141,6 +142,7 @@ resource "azurerm_linux_function_app" "Function-App" {
     "WEBSITE_ENABLE_SYNC_UPDATE_SITE" = "true"
     "ENABLE_ORYX_BUILD"               = "1"
     "PYTHON_VERSION" = "3.10"
+    "WEBSITES_ENABLE_APP_SERVICE_STORAGE" = "false"
 
 
   }
@@ -152,23 +154,23 @@ resource "azurerm_function_app_function" "Function" {
   function_app_id = azurerm_linux_function_app.Function-App.id
   language        = "Python"
   config_json = jsonencode({
-    "bindings" = [
+   "bindings" = [
       {
-        "authLevel" = "anonymous"
-        "direction" = "in"
+        "authLevel" = "anonymous",
+        "direction" = "in",
         "methods" = [
           "get",
           "post",
         ]
-        "name" = "req"
+        "name" = "req",
         "type" = "httpTrigger"
       },
       {
-        "direction" = "out"
-        "name"      = "$return"
+       "direction" = "out",
+        "name"      = "$return",
         "type"      = "http"
-      },
-    ]
+      }
+    ],
     "scriptFile" = "function_app.py"
   })
 }
