@@ -117,8 +117,9 @@ resource "azurerm_linux_function_app" "Function-App" {
     application_stack {
       python_version = "3.10"
     }
-
+    detailed_error_logging_enabled  = true
     ftps_state = "Disabled"
+    runtime_scale_monitoring_enabled = true
 
      cors {
       allowed_origins = [
@@ -128,12 +129,12 @@ resource "azurerm_linux_function_app" "Function-App" {
         "https://CDN-RaineyCloud.azureedge.net",
         "https://APIendpoint.azureedge.net"
       ]
-      support_credentials = true
+      support_credentials = false
     }
   }
 
   app_settings = {
-    "WEBSITE_RUN_FROM_PACKAGE" = "https://github.com/JRainey80/ResumeAPIapp/actions/runs/10973807171/artifacts/1961815996"
+    "WEBSITE_RUN_FROM_PACKAGE" = var.run_from_package
     "FUNCTIONS_WORKER_RUNTIME" = "python"
     "FUNCTIONS_EXTENSION_VERSION" = "~4"
     "COSMOS_DB_TABLE" = var.db_table
@@ -141,7 +142,7 @@ resource "azurerm_linux_function_app" "Function-App" {
     "SCM_DO_BUILD_DURING_DEPLOYMENT"  = "1"
     "WEBSITE_ENABLE_SYNC_UPDATE_SITE" = "true"
     "ENABLE_ORYX_BUILD"               = "1"
-    "PYTHON_VERSION" = "3.10"
+    "PYTHON_VERSION" = var.python_version
     "WEBSITES_ENABLE_APP_SERVICE_STORAGE" = "false"
 
 
