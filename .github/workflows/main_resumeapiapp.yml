@@ -80,6 +80,7 @@ jobs:
           client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_C1D741CD804D4EC29C18355CD2D461D3 }}
           tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_B177A3AE5F0F43B793660DF2F90A21F6 }}
           subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_4B84ECEA1A1E40FBAD7EBFAF13B72F30 }}
+  
 
       - name: 'Deploy to Azure Functions'
         uses: Azure/functions-action@v1
