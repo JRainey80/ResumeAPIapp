@@ -9,7 +9,7 @@ terraform {
 
 provider "azurerm" {
   features {}
-  subscription_id = "8ff76be0-453f-470b-a5d2-a270770fd732"
+  subscription_id = var.sub_id
 }
 
 terraform {
@@ -59,7 +59,7 @@ resource "azurerm_key_vault" "Key-Vault" {
 
 data "azurerm_key_vault_secret" "SA-ResumeAPI-AK" {
   key_vault_id = azurerm_key_vault.Key-Vault.id  
-  name         = "SA-ResumeAPI-AK"
+  name         = var.key_vault_secret
 }
 
 
@@ -111,11 +111,11 @@ resource "azurerm_linux_function_app" "Function-App" {
   service_plan_id     = azurerm_service_plan.Service-Plan.id
 
   storage_account_name       = azurerm_storage_account.SA-ResumeAPI.name
-  storage_account_access_key = data.azurerm_key_vault_secret.SA-ResumeAPI-AK.value
+  storage_account_access_key = data.azurerm_key_vault_secret.var.key_vault_secret.value
 
   site_config {
     application_stack {
-      python_version = "3.10"
+      python_version = var.python_version
     }
     detailed_error_logging_enabled  = true
     ftps_state = "Disabled"
@@ -221,7 +221,7 @@ resource "azurerm_cdn_endpoint" "CDN-API-Endpoint" {
 
   origin {
     name      = azurerm_linux_function_app.Function-App.name
-    host_name = "resumeapiapp.z13.web.core.windows.net"
+    host_name = var.function_app_host_name
   }
   is_http_allowed  = false
   is_https_allowed = true
