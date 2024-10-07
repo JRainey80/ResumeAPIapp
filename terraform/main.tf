@@ -14,9 +14,9 @@ provider "azurerm" {
 
 terraform {
   backend "azurerm" {
-    resource_group_name   = "hub-nva-rg"                # Name of the resource group where the storage account is located
-    storage_account_name  = "terrathings01"          # The unique name of your storage account
-    container_name        = "resume-tf-state"                # Name of the container created for storing the state file
+    resource_group_name   = "hub-nva-rg"                
+    storage_account_name  = "terrathings01"          
+    container_name        = "resume-tf-state"                
     key                   = "terraform.tfstate"             
   }
 }
@@ -96,8 +96,9 @@ resource "azurerm_service_plan" "Service-Plan" {
   name                = "ASP-resumeapi-af45"
   location            = azurerm_resource_group.RG-ResumeAPI.location
   resource_group_name = azurerm_resource_group.RG-ResumeAPI.name
-  os_type             = "Linux" 
-  sku_name            = "Y1"    
+  os_type             = "Linux"
+  sku_name            = "Y1"
+
 }
 
 
@@ -111,15 +112,16 @@ resource "azurerm_linux_function_app" "Function-App" {
   service_plan_id     = azurerm_service_plan.Service-Plan.id
 
   storage_account_name       = azurerm_storage_account.SA-ResumeAPI.name
-  storage_account_access_key = data.azurerm_key_vault_secret.var.key_vault_secret.value
+  storage_account_access_key = data.azurerm_key_vault_secret.SA-ResumeAPI-AK.value
 
   site_config {
     application_stack {
       python_version = var.python_version
     }
-    detailed_error_logging_enabled  = true
+    ip_restriction_default_action = "Allow"
+    scm_ip_restriction_default_action = "Allow"
     ftps_state = "Disabled"
-    runtime_scale_monitoring_enabled = true
+    
 
      cors {
       allowed_origins = [
@@ -127,7 +129,8 @@ resource "azurerm_linux_function_app" "Function-App" {
         "https://raineyresume.z13.web.core.windows.net",
         "https://resume.rainey-cloud.com",
         "https://CDN-RaineyCloud.azureedge.net",
-        "https://APIendpoint.azureedge.net"
+        "https://api.rainey-cloud.com",
+        "https://portal.azure.com"
       ]
       support_credentials = false
     }
@@ -144,9 +147,11 @@ resource "azurerm_linux_function_app" "Function-App" {
     "ENABLE_ORYX_BUILD"               = "1"
     "PYTHON_VERSION" = var.python_version
     "WEBSITES_ENABLE_APP_SERVICE_STORAGE" = "false"
-
-
   }
+
+    lifecycle {
+      ignore_changes = [app_settings["FUNCTIONS_EXTENSION_VERSION"]]
+    }
 }
 
 
@@ -192,12 +197,69 @@ resource "azurerm_cdn_endpoint" "CDN-RaineyCloud" {
   location            = azurerm_resource_group.RG-Resume.location
   resource_group_name = azurerm_resource_group.RG-Resume.name
 
-  origin {
-    name      = azurerm_storage_account.SA-Resume.name
-    host_name = "raineyresume.z13.web.core.windows.net"
-  }
+  origin { 
+          host_name  = "raineyresume.z13.web.core.windows.net"
+          http_port  = 80
+          https_port = 443
+          name       = "raineyresume-z13-web-core-windows-net"
+        } 
   is_http_allowed  = true
   is_https_allowed = true
+  is_compression_enabled = true
+  querystring_caching_behaviour = "IgnoreQueryString"
+  optimization_type = "GeneralWebDelivery"
+  origin_path = null
+  content_types_to_compress = [
+    "application/eot",
+    "application/font",
+    "application/font-sfnt",
+    "application/javascript",
+    "application/json",
+    "application/opentype",
+    "application/otf",
+    "application/pkcs7-mime",
+    "application/truetype",
+    "application/ttf",
+    "application/vnd.ms-fontobject",
+    "application/xhtml+xml",
+    "application/xml",
+    "application/xml+rss",
+    "application/x-font-opentype",
+    "application/x-font-truetype",
+    "application/x-font-ttf",
+    "application/x-httpd-cgi",
+    "application/x-javascript",
+    "application/x-mpegurl",
+    "application/x-opentype",
+    "application/x-otf",
+    "application/x-perl",
+    "application/x-ttf",
+    "font/eot",
+    "font/ttf",
+    "font/otf",
+    "font/opentype",
+    "image/svg+xml",
+    "text/css",
+    "text/csv",
+    "text/html",
+    "text/javascript",
+    "text/js",
+    "text/plain",
+    "text/richtext",
+    "text/tab-separated-values",
+    "text/xml",
+    "text/x-script",
+    "text/x-component",
+    "text/x-java-source"
+  ]
+
+  lifecycle {
+    ignore_changes = [
+      content_types_to_compress,
+      is_compression_enabled,
+      origin_host_header
+    ]
+  }
 }
 
 resource "azurerm_cdn_endpoint_custom_domain" "RaineyCloud-CustomDomain" {
@@ -210,6 +272,11 @@ resource "azurerm_cdn_endpoint_custom_domain" "RaineyCloud-CustomDomain" {
     protocol_type    = "ServerNameIndication"
     tls_version      = "TLS12"
   }
+  lifecycle {
+    ignore_changes = [
+      cdn_endpoint_id 
+    ]
+  }
 }
 
 
@@ -219,12 +286,71 @@ resource "azurerm_cdn_endpoint" "CDN-API-Endpoint" {
   location            = azurerm_resource_group.RG-Resume.location
   resource_group_name = azurerm_resource_group.RG-Resume.name
 
-  origin {
-    name      = azurerm_linux_function_app.Function-App.name
-    host_name = var.function_app_host_name
-  }
+  origin { 
+        host_name  = "resumeapiapp.azurewebsites.net"
+        http_port  = 80
+        https_port = 443
+        name       = "resumeapiapp-azurewebsites-net"
+        }
   is_http_allowed  = false
   is_https_allowed = true
+  is_compression_enabled = true
+  querystring_caching_behaviour = "IgnoreQueryString"
+  optimization_type = "GeneralWebDelivery"
+  origin_path = null
+  probe_path  = null
+  content_types_to_compress = [
+    "application/eot",
+    "application/font",
+    "application/font-sfnt",
+    "application/javascript",
+    "application/json",
+    "application/opentype",
+    "application/otf",
+    "application/pkcs7-mime",
+    "application/truetype",
+    "application/ttf",
+    "application/vnd.ms-fontobject",
+    "application/xhtml+xml",
+    "application/xml",
+    "application/xml+rss",
+    "application/x-font-opentype",
+    "application/x-font-truetype",
+    "application/x-font-ttf",
+    "application/x-httpd-cgi",
+    "application/x-javascript",
+    "application/x-mpegurl",
+    "application/x-opentype",
+    "application/x-otf",
+    "application/x-perl",
+    "application/x-ttf",
+    "font/eot",
+    "font/ttf",
+    "font/otf",
+    "font/opentype",
+    "image/svg+xml",
+    "text/css",
+    "text/csv",
+    "text/html",
+    "text/javascript",
+    "text/js",
+    "text/plain",
+    "text/richtext",
+    "text/tab-separated-values",
+    "text/xml",
+    "text/x-script",
+    "text/x-component",
+    "text/x-java-source"
+  ]
+
+  lifecycle {
+    ignore_changes = [
+      content_types_to_compress,
+      is_compression_enabled,
+      origin_host_header
+      
+    ]
+  }
 }
 
 # Cosmos DB/Table
