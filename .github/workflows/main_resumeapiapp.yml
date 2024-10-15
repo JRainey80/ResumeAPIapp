@@ -40,15 +40,15 @@ jobs:
           echo "TF_VAR_cdn_raineycloud_hostname=${{ secrets.cdn_raineycloud_hostname }}" >> $GITHUB_ENV
 
       - name: Initialize Terraform
-        working-directory: ./ResumeAPIapp/terraform
+        working-directory: ./terraform
         run: terraform init
 
       - name: Terraform Plan
-        working-directory: ./ResumeAPIapp/terraform
+        working-directory: ./terraform
         run: terraform plan -out=tfplan
 
       - name: Terraform Apply
-        working-directory: ./ResumeAPIapp/terraform
+        working-directory: ./terraform
         run: terraform apply -auto-approve tfplan
 
   build:
