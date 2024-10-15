@@ -49,6 +49,10 @@ jobs:
       - name: Initialize Terraform
         working-directory: ./terraform
         run: terraform init
+        
+      - name: Refresh Terraform state
+        working-directory: ./terraform
+        run: terraform refresh
 
       - name: Terraform Plan
         working-directory: ./terraform
