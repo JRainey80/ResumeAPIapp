@@ -57,7 +57,7 @@ jobs:
         
       - name: Terraform Plan
         working-directory: ./terraform
-        run: terraform plan -out=tfplan
+        run: terraform plan -var="sub_id=${{ secrets.sub_id }}" -out=tfplan
 
       - name: Terraform Apply
         working-directory: ./terraform
