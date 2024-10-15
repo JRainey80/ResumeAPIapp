@@ -147,6 +147,7 @@ resource "azurerm_linux_function_app" "Function-App" {
     "ENABLE_ORYX_BUILD"               = "1"
     "PYTHON_VERSION" = var.python_version
     "WEBSITES_ENABLE_APP_SERVICE_STORAGE" = "false"
+
   }
 
     lifecycle {
