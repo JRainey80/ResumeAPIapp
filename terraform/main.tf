@@ -404,3 +404,8 @@ resource "azurerm_user_assigned_identity" "UA-ManagedIdentity" {
   name                = "ResumeAPIapp-id-b604"
   resource_group_name = azurerm_resource_group.RG-ResumeAPI.name
 }
+
+variable "sub_id" {
+  description = "Azure subscription ID"
+  type        = string
+}
