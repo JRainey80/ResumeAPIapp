@@ -54,6 +54,10 @@ jobs:
         working-directory: ./terraform
         run: terraform refresh
 
+      - name: Debug sub_id
+        working-directory: ./terraform
+        run: echo "sub_id is: $TF_VAR_sub_id"
+        
       - name: Terraform Plan
         working-directory: ./terraform
         run: terraform plan -out=tfplan
