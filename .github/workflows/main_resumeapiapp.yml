@@ -116,7 +116,7 @@ jobs:
           echo "DB_TABLE=${{ secrets.DB_TABLE }}" >> $GITHUB_ENV
 
       - name: Run Python tests
-        run: pytest tests/
+        run: pytest test_function_app.py
 
   deploy:
     runs-on: ubuntu-latest
