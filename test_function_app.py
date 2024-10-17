@@ -88,8 +88,8 @@ def test_table_api_write_operation(mock_table_service_client):
 
     # Simulate the entity already existing in the table by returning a mock entity
     mock_table_client.get_entity.return_value = {
-        'PartitionKey': 'test-partition', 
-        'RowKey': 'test-row', 
+        'PartitionKey': 'test-partition',
+        'RowKey': 'test-row',
         'count': 5
     }
 
@@ -98,9 +98,9 @@ def test_table_api_write_operation(mock_table_service_client):
     # Call the function that writes to the Table API
     write_to_table(mock_table_client, 'test-partition', 'test-row')
     
-    # Ensure that the `upsert_entity` method was called with the correct updated entity
+    # Ensure that the `update_entity` method was called with the correct updated entity
     mock_table_client.update_entity.assert_called_once_with(
-        {'PartitionKey': 'test-partition', 'RowKey': 'test-row', 'count': 6},
+        entity={'PartitionKey': 'test-partition', 'RowKey': 'test-row', 'count': 6},
         mode=mock_table_client.update_entity.call_args[1]['mode']  # Match the mode from the function
     )
 
