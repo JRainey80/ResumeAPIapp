@@ -33,7 +33,7 @@ def test_cosmos_db_integration():
     assert db_table is not None, "DB_TABLE is not set"
 
     # Connect to Cosmos DB using the provided secrets
-    client = CosmosClient(db_connection_string, credential=None)
+    client = CosmosClient.from_connection_string(db_connection_string)
     database = client.get_database_client('your-database-name')
     container = database.get_container_client(db_table)
 
@@ -53,7 +53,7 @@ def test_cosmos_db_mock(mock_cosmos_client):
     mock_container = mock_cosmos_client.return_value.get_container_client.return_value
     mock_container.read_item.return_value = {'id': 'test-id', 'count': 1}
 
-    from function_app import main
+    from api_trig.function_app import main
     result = main('test-id')  # Adjust this call according to your function logic
     assert result['count'] == 1
 
@@ -66,7 +66,7 @@ def test_cosmos_db_write_operation(mock_cosmos_client):
     """
     mock_container = mock_cosmos_client.return_value.get_container_client.return_value
 
-    from function_app import write_to_cosmos  # Your function that writes data to Cosmos DB
+    from api_trig.function_app import write_to_cosmos  # Your function that writes data to Cosmos DB
     test_item = {'id': 'test-item', 'value': 100}
 
     # Call the function that writes to Cosmos DB

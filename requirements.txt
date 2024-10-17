@@ -1,3 +1,5 @@
 azure-functions
 azure-data-tables
 azure-core
+azure-cosmos
+pytest
