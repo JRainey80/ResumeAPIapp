@@ -108,6 +108,7 @@ jobs:
         run: |
           pip install pytest
           pip install azure-data-tables  # Install Cosmos DB SDK or mock SDK
+          pip install azure-cosmos
 
       # Set environment variables for the tests (using secrets from GitHub)
       - name: Set environment variables for tests
