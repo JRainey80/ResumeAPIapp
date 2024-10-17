@@ -23,6 +23,7 @@ dependencies:
   - pip=24.2
   - pip:
       - azure-functions
+      - azure-cosmos
   - pycparser=2.22
   - pysocks=1.7.1
   - python=3.10.14
