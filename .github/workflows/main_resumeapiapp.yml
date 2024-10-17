@@ -109,6 +109,7 @@ jobs:
           pip install pytest
           pip install azure-data-tables  # Install Cosmos DB SDK or mock SDK
           pip install azure-cosmos
+          pip install azure-functions
 
       - name: Set Python Path
         run: echo "PYTHONPATH=$PYTHONPATH:$(pwd)" >> $GITHUB_ENV
@@ -118,6 +119,7 @@ jobs:
         run: |
           echo "DB_CONNECTION_STRING=${{ secrets.DB_CONNECTION_STRING }}" >> $GITHUB_ENV
           echo "DB_TABLE=${{ secrets.DB_TABLE }}" >> $GITHUB_ENV
+          echo "DB_DATABASE=${{ secrets.DB_DATABASE }}" >> $GITHUB_ENV
 
       - name: Run Python tests
         run: pytest test_function_app.py

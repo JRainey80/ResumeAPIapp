@@ -27,10 +27,12 @@ def test_cosmos_db_integration():
     # Access environment variables for secrets
     db_connection_string = os.getenv('DB_CONNECTION_STRING')
     db_table = os.getenv('DB_TABLE')
+    db_database = os.getenv('DB_DATABASE')
 
     # Ensure that environment variables are set
     assert db_connection_string is not None, "DB_CONNECTION_STRING is not set"
     assert db_table is not None, "DB_TABLE is not set"
+    assert db_database is not None, "DB_DATABASE is not set"
 
     # Connect to Cosmos DB using the provided secrets
     client = CosmosClient.from_connection_string(db_connection_string)
