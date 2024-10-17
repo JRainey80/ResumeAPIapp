@@ -33,7 +33,17 @@ jobs:
             echo "ARM_CLIENT_SECRET=$(echo '${{ secrets.AZURE_CREDENTIALS }}' | jq -r .clientSecret)" >> $GITHUB_ENV
             echo "ARM_SUBSCRIPTION_ID=$(echo '${{ secrets.AZURE_CREDENTIALS }}' | jq -r .subscriptionId)" >> $GITHUB_ENV
             echo "ARM_TENANT_ID=$(echo '${{ secrets.AZURE_CREDENTIALS }}' | jq -r .tenantId)" >> $GITHUB_ENV
-
+      
+      - name: Set environment variables for Terraform
+        run: |
+            echo "TF_VAR_db_connection_string=${{ secrets.db_connection_string }}" >> $GITHUB_ENV
+            echo "TF_VAR_db_table=${{ secrets.db_table }}" >> $GITHUB_ENV
+            echo "TF_VAR_run_from_package=${{ secrets.run_from_package }}" >> $GITHUB_ENV
+            echo "TF_VAR_python_version=${{ secrets.python_version }}" >> $GITHUB_ENV
+            echo "TF_VAR_sub_id=${{ secrets.sub_id }}" >> $GITHUB_ENV
+            echo "TF_VAR_key_vault_secret=${{ secrets.key_vault_secret }}" >> $GITHUB_ENV
+            echo "TF_VAR_function_app_host_name=${{ secrets.function_app_host_name }}" >> $GITHUB_ENV
+            echo "TF_VAR_cdn_raineycloud_hostname=${{ secrets.cdn_raineycloud_hostname }}" >> $GITHUB_ENV
       - name: Initialize Terraform
         working-directory: ./terraform
         run: terraform init
