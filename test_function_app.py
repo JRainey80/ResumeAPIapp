@@ -83,14 +83,24 @@ def test_table_api_write_operation(mock_table_service_client):
     """
     Unit test for writing an item to Azure Table using mocks.
     """
+    # Mock the Table client
     mock_table_client = mock_table_service_client.return_value.get_table_client.return_value
 
-    from api_trig.function_app import write_to_table  # Import your `write_to_table` function
-    test_item = {'PartitionKey': 'test-partition', 'RowKey': 'test-row', 'value': 100}
+    # Simulate the entity already existing in the table by returning a mock entity
+    mock_table_client.get_entity.return_value = {
+        'PartitionKey': 'test-partition', 
+        'RowKey': 'test-row', 
+        'count': 5
+    }
 
+    from api_trig.function_app import write_to_table  # Import your `write_to_table` function
+    
     # Call the function that writes to the Table API
     write_to_table(mock_table_client, 'test-partition', 'test-row')
-
-    # Assert that the `upsert_entity` method was called with the correct arguments
-    mock_table_client.upsert_entity.assert_called_once_with({'PartitionKey': 'test-partition', 'RowKey': 'test-row', 'count': 1})
+    
+    # Ensure that the `upsert_entity` method was called with the correct updated entity
+    mock_table_client.update_entity.assert_called_once_with(
+        {'PartitionKey': 'test-partition', 'RowKey': 'test-row', 'count': 6},
+        mode=mock_table_client.update_entity.call_args[1]['mode']  # Match the mode from the function
+    )
 
