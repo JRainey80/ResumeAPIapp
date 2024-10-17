@@ -10,7 +10,7 @@ def test_main_function_logic():
     Unit test for your main function logic in function_app.py.
     Mocks a request and tests the response from the main function.
     """
-    from function_app import main  # Import the main function from function_app.py
+    from api_trig.function_app import main  # Import the main function from function_app.py
     mock_request = Mock()
     mock_request.method = 'GET'
 
