@@ -117,8 +117,8 @@ jobs:
       # Set environment variables for the tests (using secrets from GitHub)
       - name: Set environment variables for tests
         run: |
-          echo "DB_CONNECTION_STRING=${{ secrets.DB_CONNECTION_STRING }}" >> $GITHUB_ENV
-          echo "DB_TABLE=${{ secrets.DB_TABLE }}" >> $GITHUB_ENV
+              echo "DB_Table_Connection_String=${{ secrets.DB_Table_Connection_String }}" >> $GITHUB_ENV
+              echo "COSMOS_DB_TABLE=${{ secrets.COSMOS_DB_TABLE }}" >> $GITHUB_ENV
 
       - name: Run Python tests
         run: pytest test_function_app.py
