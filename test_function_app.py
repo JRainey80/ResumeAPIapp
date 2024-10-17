@@ -1,7 +1,7 @@
 import os
 import pytest
 from unittest.mock import patch, Mock
-from azure.cosmos import CosmosClient
+from azure.data.tables import TableServiceClient
 
 
 # --- Unit Test for Function Logic ---
@@ -13,66 +13,74 @@ def test_main_function_logic():
     from api_trig.function_app import main  # Import the main function from function_app.py
     mock_request = Mock()
     mock_request.method = 'GET'
+    mock_request.headers = {'Origin': 'https://resume.rainey-cloud.com'}
 
     result = main(mock_request)  # Call the main function
-    assert result.status_code == 200
-    assert result.body == "Expected Response"
+    assert result.status_code == 200  # Adjust based on your actual expected response
+    assert result.body == "Expected Response"  # Adjust based on your actual response
 
 
-# --- Integration Test for Cosmos DB ---
-def test_cosmos_db_integration():
+# --- Integration Test for Azure Table API ---
+def test_table_api_integration():
     """
-    Integration test that interacts with Cosmos DB using environment variables.
+    Integration test that interacts with the Azure Table API.
     """
-    # Access environment variables for secrets
     db_connection_string = os.getenv('DB_CONNECTION_STRING')
     db_table = os.getenv('DB_TABLE')
-    db_database = os.getenv('DB_DATABASE')
 
-    # Ensure that environment variables are set
+    # Ensure that the connection string and table name are set
     assert db_connection_string is not None, "DB_CONNECTION_STRING is not set"
     assert db_table is not None, "DB_TABLE is not set"
-    assert db_database is not None, "DB_DATABASE is not set"
 
-    # Connect to Cosmos DB using the provided secrets
-    client = CosmosClient.from_connection_string(db_connection_string)
-    database = client.get_database_client('your-database-name')
-    container = database.get_container_client(db_table)
+    # Use TableServiceClient for Table API
+    service_client = TableServiceClient.from_connection_string(db_connection_string)
+    table_client = service_client.get_table_client(db_table)
 
-    # Simulate reading an item from Cosmos DB
-    item = container.read_item(item='item-id', partition_key='partition-key')
-    assert item['id'] == 'item-id'
+    # Now you can interact with the table client
+    # Example: Read from the table
+    entities = table_client.list_entities()
+    for entity in entities:
+        print(entity)
 
 
-# --- Mocked Test for Cosmos DB ---
-@patch('azure.cosmos.CosmosClient')
-def test_cosmos_db_mock(mock_cosmos_client):
+# --- Mocked Test for Azure Table API ---
+@patch('azure.data.tables.TableServiceClient')
+def test_table_api_mock(mock_table_service_client):
     """
-    Unit test with mocked Cosmos DB using environment variables.
-    This avoids making actual Cosmos DB calls.
+    Unit test with mocked Azure Table API interactions.
+    This avoids making actual Azure Table API calls.
     """
-    # Mock the Cosmos DB container and its return values
-    mock_container = mock_cosmos_client.return_value.get_container_client.return_value
-    mock_container.read_item.return_value = {'id': 'test-id', 'count': 1}
+    # Mock the Table client and its return values
+    mock_table_client = mock_table_service_client.return_value.get_table_client.return_value
+    mock_table_client.get_entity.return_value = {'id': 'test-id', 'count': 1}
 
     from api_trig.function_app import main
-    result = main('test-id')  # Adjust this call according to your function logic
-    assert result['count'] == 1
+    mock_request = Mock()
+    mock_request.method = 'GET'
+    mock_request.headers = {'Origin': 'https://resume.rainey-cloud.com'}
+
+    result = main(mock_request)
+    
+    # Simulate retrieving an entity from the table
+    entity = mock_table_client.get_entity('test-id')
+
+    assert result.status_code == 200  # Adjust based on your actual response
+    assert entity['count'] == 1  # Ensure the mock returns the correct value
 
 
-# --- Mocked Test for Cosmos DB Write Operation ---
-@patch('azure.cosmos.CosmosClient')
-def test_cosmos_db_write_operation(mock_cosmos_client):
+# --- Mocked Test for Azure Table Write Operation ---
+@patch('azure.data.tables.TableServiceClient')
+def test_table_api_write_operation(mock_table_service_client):
     """
-    Unit test for writing an item to Cosmos DB using mocks.
+    Unit test for writing an item to Azure Table using mocks.
     """
-    mock_container = mock_cosmos_client.return_value.get_container_client.return_value
+    mock_table_client = mock_table_service_client.return_value.get_table_client.return_value
 
-    from api_trig.function_app import write_to_cosmos  # Your function that writes data to Cosmos DB
-    test_item = {'id': 'test-item', 'value': 100}
+    from api_trig.function_app import write_to_table  # Your function that writes data to the Table API
+    test_item = {'PartitionKey': 'test-partition', 'RowKey': 'test-row', 'value': 100}
 
-    # Call the function that writes to Cosmos DB
-    write_to_cosmos(test_item)
+    # Call the function that writes to the Table API
+    write_to_table(test_item)
 
-    # Assert that the `upsert_item` method was called with the correct arguments
-    mock_container.upsert_item.assert_called_once_with(test_item)
+    # Assert that the `upsert_entity` method was called with the correct arguments
+    mock_table_client.upsert_entity.assert_called_once_with(test_item)

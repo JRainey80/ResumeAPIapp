@@ -6,7 +6,6 @@ dependencies:
   - azure-core=1.30.2
   - azure-data-tables=12.4.4
   - azure-functions
-  - azure-cosmos=4.3.0
   - brotli-python=1.1.0
   - bzip2=1.0.8
   - ca-certificates=2024.7.4
@@ -25,7 +24,7 @@ dependencies:
   - pip=24.2
   - pip:
       - azure-functions
-      - azure-cosmos
+      - azure-data-tables
   - pycparser=2.22
   - pysocks=1.7.1
   - python=3.10.14
