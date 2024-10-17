@@ -25,12 +25,12 @@ def test_table_api_integration():
     """
     Integration test that interacts with the Azure Table API.
     """
-    db_connection_string = os.getenv('DB_CONNECTION_STRING')
-    db_table = os.getenv('DB_TABLE')
+    db_connection_string = os.getenv('DB_Table_Connection_String')
+    db_table = os.getenv('COSMOS_DB_TABLE')
 
     # Ensure that the connection string and table name are set
-    assert db_connection_string is not None, "DB_CONNECTION_STRING is not set"
-    assert db_table is not None, "DB_TABLE is not set"
+    assert db_connection_string is not None, "DB_connection_string is not set"
+    assert db_table is not None, "DB_Table is not set"
 
     # Use TableServiceClient for Table API
     service_client = TableServiceClient.from_connection_string(db_connection_string)

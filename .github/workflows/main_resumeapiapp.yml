@@ -119,7 +119,6 @@ jobs:
         run: |
           echo "DB_CONNECTION_STRING=${{ secrets.DB_CONNECTION_STRING }}" >> $GITHUB_ENV
           echo "DB_TABLE=${{ secrets.DB_TABLE }}" >> $GITHUB_ENV
-          echo "DB_DATABASE=${{ secrets.DB_DATABASE }}" >> $GITHUB_ENV
 
       - name: Run Python tests
         run: pytest test_function_app.py
