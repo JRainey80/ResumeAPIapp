@@ -35,7 +35,7 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
     allowed_origins = [
         "https://cdn-raineycloud.azureedge.net", 
         "https://portal.azure.com", 
-        "https://api.rainey-cloud.com", 
+        "https://api.rainey-cloud.com/api/api_trig", 
         "https://raineyresume.z13.web.core.windows.net", 
         "https://resumeapiapp.azurewebsites.net/api/api_trig", 
         "https://resume.rainey-cloud.com"
