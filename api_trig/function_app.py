@@ -38,7 +38,8 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
         "https://api.rainey-cloud.com/api/api_trig", 
         "https://raineyresume.z13.web.core.windows.net", 
         "https://resumeapiapp.azurewebsites.net/api/api_trig", 
-        "https://resume.rainey-cloud.com"
+        "https://resume.rainey-cloud.com",
+        "https://api.rainey-cloud.com"
     ]
 
     if origin not in allowed_origins:
