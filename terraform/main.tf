@@ -293,7 +293,7 @@ resource "azurerm_cdn_endpoint" "CDN-API-Endpoint" {
         https_port = 443
         name       = "resumeapiapp-azurewebsites-net"
         }
-  is_http_allowed  = false
+  is_http_allowed  = true
   is_https_allowed = true
   is_compression_enabled = true
   querystring_caching_behaviour = "IgnoreQueryString"
