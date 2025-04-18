@@ -280,6 +280,7 @@ resource "azurerm_cdn_endpoint_custom_domain" "RaineyCloud-CustomDomain" {
   }
 }
 
+# comment just to make a change to the file so I can run my pipeline
 
 resource "azurerm_cdn_endpoint" "CDN-API-Endpoint" {
   name                = "APIendpoint"
