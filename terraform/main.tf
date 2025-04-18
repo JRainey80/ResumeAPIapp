@@ -167,7 +167,7 @@ resource "azurerm_function_app_function" "Function" {
         "direction" = "in",
         "methods" = [
           "get",
-          "post",
+          "post"
         ]
         "name" = "req",
         "type" = "httpTrigger"
