@@ -77,7 +77,7 @@ resource "azurerm_storage_account" "SA-Resume" {
     error_404_document = "404errorpagehtml.html"
   }
 }
-
+# container
 resource "azurerm_storage_container" "static_files" {
   name                  = "$web"  
   storage_account_name  = azurerm_storage_account.SA-Resume.name
