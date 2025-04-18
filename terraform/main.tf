@@ -25,7 +25,7 @@ terraform {
 data "azurerm_client_config" "current" {}
 
 
-# Resource Groups.
+# Resource Groups
 
 resource "azurerm_resource_group" "RG-ResumeAPI" {
   name     = "resume-api"
