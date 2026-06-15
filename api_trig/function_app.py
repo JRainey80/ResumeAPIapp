@@ -67,7 +67,8 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
         return func.HttpResponse(
             body=json.dumps({"error": "Missing CosmosDB connection string"}),
             status_code=500,
-            mimetype="application/json"
+            mimetype="application/json",
+            headers=headers
         )
 
     # Check for the Cosmos DB table name
@@ -106,5 +107,6 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
     return func.HttpResponse(
         body=json.dumps({"count": entity['count']}),
         status_code=200,
-        mimetype="application/json"
+        mimetype="application/json",
+        headers=headers
     )
