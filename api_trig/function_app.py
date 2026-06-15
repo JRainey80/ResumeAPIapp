@@ -34,11 +34,9 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
     origin = req.headers.get("Origin")
     allowed_origins = [
         "https://portal.azure.com", 
-        "https://api.rainey-cloud.com/api/api_trig", 
-        "https://raineyresume.z13.web.core.windows.net", 
-        "https://resumeapiapp.azurewebsites.net/api/api_trig", 
         "https://resume.rainey-cloud.com",
-        "https://api.rainey-cloud.com"
+        "https://kind-tree-0c37b6eof.7.azurestaticapps.net"
+     
     ]
 
     if origin not in allowed_origins:
@@ -69,7 +67,7 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
         return func.HttpResponse(
             body=json.dumps({"error": "Missing CosmosDB connection string"}),
             status_code=500,
-            mimetype="application/json"
+            mimetype="application/json",
             headers=headers
         )
 
@@ -80,7 +78,7 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
         return func.HttpResponse(
             body=json.dumps({"error": "Missing environment variable 'COSMOS_DB_TABLE'"}),
             status_code=500,
-            mimetype="application/json"
+            mimetype="application/json",
             headers=headers
         )
 
@@ -101,7 +99,7 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
         return func.HttpResponse(
             body=json.dumps({"error": f"An error occurred: {str(e)}"}), 
             status_code=500,
-            mimetype="application/json"
+            mimetype="application/json",
             headers=headers
         )
 
@@ -109,6 +107,6 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
     return func.HttpResponse(
         body=json.dumps({"count": entity['count']}),
         status_code=200,
-        mimetype="application/json"
+        mimetype="application/json",
         headers=headers
     )
