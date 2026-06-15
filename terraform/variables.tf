@@ -33,7 +33,3 @@ variable "function_app_host_name" {
   description = "host name of function app"
 }
 
-variable "cdn_raineycloud_hostname" {
-  type        = string
-  description = "host name for the RaineyCloud CDN endpoint"
-}
