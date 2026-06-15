@@ -33,7 +33,6 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
     # Check the origin for CORS
     origin = req.headers.get("Origin")
     allowed_origins = [
-        "https://cdn-raineycloud.azureedge.net", 
         "https://portal.azure.com", 
         "https://api.rainey-cloud.com/api/api_trig", 
         "https://raineyresume.z13.web.core.windows.net", 
@@ -71,6 +70,7 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
             body=json.dumps({"error": "Missing CosmosDB connection string"}),
             status_code=500,
             mimetype="application/json"
+            headers=headers
         )
 
     # Check for the Cosmos DB table name
@@ -81,6 +81,7 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
             body=json.dumps({"error": "Missing environment variable 'COSMOS_DB_TABLE'"}),
             status_code=500,
             mimetype="application/json"
+            headers=headers
         )
 
     # Interact with Azure Table storage
@@ -101,6 +102,7 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
             body=json.dumps({"error": f"An error occurred: {str(e)}"}), 
             status_code=500,
             mimetype="application/json"
+            headers=headers
         )
 
     # Return the count after successful update
@@ -108,4 +110,5 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
         body=json.dumps({"count": entity['count']}),
         status_code=200,
         mimetype="application/json"
+        headers=headers
     )
