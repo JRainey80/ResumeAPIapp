@@ -52,7 +52,7 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
             },
         )
 
-       headers = {
+    headers = {
         "Access-Control-Allow-Origin": origin or "https://resume.rainey-cloud.com",
         "Access-Control-Allow-Methods": "GET, OPTIONS",
         "Access-Control-Allow-Headers": "Content-Type",
