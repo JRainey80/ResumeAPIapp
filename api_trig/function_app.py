@@ -39,7 +39,7 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
      
         ]
 
-    if origin not in allowed_origins:
+    if origin and origin not in allowed_origins:
         logging.warning(f"Unauthorized origin: {origin}")
         return func.HttpResponse(
             status_code=403,
@@ -52,8 +52,8 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
             },
         )
 
-    headers = {
-        "Access-Control-Allow-Origin": origin,
+       headers = {
+        "Access-Control-Allow-Origin": origin or "https://resume.rainey-cloud.com",
         "Access-Control-Allow-Methods": "GET, OPTIONS",
         "Access-Control-Allow-Headers": "Content-Type",
         "Access-Control-Max-Age": "3600",
