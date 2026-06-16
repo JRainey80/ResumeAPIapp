@@ -37,13 +37,21 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
         "https://resume.rainey-cloud.com",
         "https://kind-tree-0c37b6e0f.7.azurestaticapps.net"
      
-    ]
+        ]
 
     if origin not in allowed_origins:
         logging.warning(f"Unauthorized origin: {origin}")
         return func.HttpResponse(
-            status_code=403,  
+            status_code=403,
             body=json.dumps({"error": "Forbidden"}),
+            mimetype="application/json",
+            headers={
+                "Access-Control-Allow-Origin": origin or "",
+                "Access-Control-Allow-Methods": "GET, OPTIONS",
+                "Access-Control-Allow-Headers": "Content-Type",
+            },
+        )
+
     headers = {
         "Access-Control-Allow-Origin": origin,
         "Access-Control-Allow-Methods": "GET, OPTIONS",
@@ -51,8 +59,11 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
         "Access-Control-Max-Age": "3600",
     }
 
-if req.method == "OPTIONS":
-    return func.HttpResponse(status_code=204, headers=headers)
+    if req.method == "OPTIONS":
+        return func.HttpResponse(
+            status_code=204,
+            headers=headers,
+        )
 
     # Check for the Cosmos DB connection string
     connection_string = os.getenv('DB_Table_Connection_String')
